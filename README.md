@@ -2,8 +2,8 @@
 
 একটি সাধারণ, দ্রুত এবং সুন্দর QR কোড জেনারেটর — শুধুমাত্র **HTML, CSS ও JavaScript** দিয়ে তৈরি। কোনো ব্যাকএন্ড লাগবে না, সরাসরি ব্রাউজারেই কাজ করে।
 
-🔗 **Live Demo:** [এখানে ক্লিক করুন](https://তোমার-ইউজারনেম.github.io/qr-code-maker/)
-*(GitHub Pages লিংক দিয়ে আপডেট করো)*
+🔗 **Live Demo:** [এখানে ক্লিক করুন](https://github.com/mohiuddinramzan/QR-Code-Generator)
+
 
 ---
 
@@ -64,5 +64,5 @@ Pull request এবং Issue সবসময় স্বাগত! নতুন
 
 ## 👤 ডেভেলপার
 
-তৈরি করেছেন **[তোমার নাম]**
-🔗 GitHub: [@তোমার-ইউজারনেম](https://github.com/তোমার-ইউজারনেম)
+তৈরি করেছেন **[Mohiuddin Ramzan]**
+🔗 GitHub: (https://github.com/mohiuddinramzan)
