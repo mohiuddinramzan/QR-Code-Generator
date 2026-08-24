@@ -2,7 +2,7 @@
 
 একটি সাধারণ, দ্রুত এবং সুন্দর QR কোড জেনারেটর — শুধুমাত্র **HTML, CSS ও JavaScript** দিয়ে তৈরি। কোনো ব্যাকএন্ড লাগবে না, সরাসরি ব্রাউজারেই কাজ করে।
 
-🔗 **Live Demo:** [এখানে ক্লিক করুন](https://github.com/mohiuddinramzan/QR-Code-Generator)
+🔗 **Live Demo:** [এখানে ক্লিক করুন](https://mohiuddinramzan.github.io/QR-Code-Generator/)
 
 
 ---
