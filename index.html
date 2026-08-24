@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --bg1:#1e1b4b;
+    --bg2:#312e81;
+    --accent:#6366f1;
+    --accent2:#a855f7;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Segoe UI', 'Noto Sans Bengali', Tahoma, sans-serif;
+    background:linear-gradient(135deg, var(--bg1), var(--bg2));
+    padding:20px;
+  }
+  .container{
+    background:var(--card);
+    border-radius:20px;
+    padding:40px;
+    max-width:480px;
+    width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  h1{
+    text-align:center;
+    font-size:26px;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  p.subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:28px;
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    background:#f3f4f6;
+    padding:6px;
+    border-radius:12px;
+  }
+  .tab-btn{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:transparent;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    transition:0.2s;
+  }
+  .tab-btn.active{
+    background:var(--accent);
+    color:#fff;
+  }
+  .input-group{
+    margin-bottom:16px;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  input[type="text"], input[type="url"], textarea{
+    width:100%;
+    padding:12px 14px;
+    border:2px solid #e5e7eb;
+    border-radius:10px;
+    font-size:14px;
+    font-family:inherit;
+    outline:none;
+    transition:0.2s;
+    resize:none;
+  }
+  input:focus, textarea:focus{
+    border-color:var(--accent);
+  }
+  .row{
+    display:flex;
+    gap:12px;
+  }
+  .row .input-group{
+    flex:1;
+  }
+  select{
+    width:100%;
+    padding:12px 14px;
+    border:2px solid #e5e7eb;
+    border-radius:10px;
+    font-size:14px;
+    outline:none;
+    background:#fff;
+  }
+  .color-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  input[type="color"]{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    padding:0;
+  }
+  .generate-btn{
+    width:100%;
+    padding:14px;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:8px;
+    transition:0.2s;
+  }
+  .generate-btn:hover{
+    opacity:0.9;
+    transform:translateY(-1px);
+  }
+  .qr-result{
+    margin-top:28px;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+  }
+  .qr-result.show{
+    display:flex;
+  }
+  #qrcode{
+    padding:16px;
+    background:#fff;
+    border-radius:14px;
+    border:2px solid #f3f4f6;
+  }
+  .download-btn{
+    padding:10px 22px;
+    background:#111827;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .download-btn:hover{
+    background:#000;
+  }
+  .hidden{
+    display:none;
+  }
+  footer{
+    text-align:center;
+    margin-top:24px;
+    font-size:12px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>QR Code Generator</h1>
+  <p class="subtitle">টেক্সট, লিংক বা তথ্য থেকে সহজে QR কোড তৈরি করুন</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="text">টেক্সট / লিংক</button>
+    <button class="tab-btn" data-tab="wifi">WiFi</button>
+  </div>
+
+  <!-- Text / URL tab -->
+  <div id="tab-text">
+    <div class="input-group">
+      <label for="qr-text">টেক্সট বা URL লিখুন</label>
+      <textarea id="qr-text" rows="3" placeholder="যেমন: https://example.com"></textarea>
+    </div>
+  </div>
+
+  <!-- WiFi tab -->
+  <div id="tab-wifi" class="hidden">
+    <div class="input-group">
+      <label for="wifi-ssid">WiFi নাম (SSID)</label>
+      <input type="text" id="wifi-ssid" placeholder="WiFi নেটওয়ার্কের নাম">
+    </div>
+    <div class="input-group">
+      <label for="wifi-pass">পাসওয়ার্ড</label>
+      <input type="text" id="wifi-pass" placeholder="WiFi পাসওয়ার্ড">
+    </div>
+    <div class="input-group">
+      <label for="wifi-enc">এনক্রিপশন টাইপ</label>
+      <select id="wifi-enc">
+        <option value="WPA">WPA/WPA2</option>
+        <option value="WEP">WEP</option>
+        <option value="nopass">নেই (Open)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-group">
+      <label for="qr-size">সাইজ (px)</label>
+      <select id="qr-size">
+        <option value="200">200x200</option>
+        <option value="300" selected>300x300</option>
+        <option value="400">400x400</option>
+        <option value="500">500x500</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>রং</label>
+      <div class="color-row">
+        <input type="color" id="qr-color" value="#000000">
+        <input type="color" id="qr-bg" value="#ffffff">
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" onclick="generateQR()">QR কোড তৈরি করুন</button>
+
+  <div class="qr-result" id="qr-result">
+    <div id="qrcode"></div>
+    <button class="download-btn" onclick="downloadQR()">ডাউনলোড করুন (PNG)</button>
+  </div>
+
+  <footer>Built with HTML, CSS & JavaScript</footer>
+</div>
+
+<script>
+  let qrCodeInstance = null;
+  let currentTab = 'text';
+
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      document.getElementById('tab-text').classList.toggle('hidden', currentTab !== 'text');
+      document.getElementById('tab-wifi').classList.toggle('hidden', currentTab !== 'wifi');
+    });
+  });
+
+  function buildContent() {
+    if (currentTab === 'wifi') {
+      const ssid = document.getElementById('wifi-ssid').value.trim();
+      const pass = document.getElementById('wifi-pass').value.trim();
+      const enc = document.getElementById('wifi-enc').value;
+      if (!ssid) {
+        alert('অনুগ্রহ করে WiFi নাম (SSID) দিন');
+        return null;
+      }
+      return `WIFI:T:${enc};S:${ssid};P:${pass};;`;
+    } else {
+      const text = document.getElementById('qr-text').value.trim();
+      if (!text) {
+        alert('অনুগ্রহ করে টেক্সট বা URL লিখুন');
+        return null;
+      }
+      return text;
+    }
+  }
+
+  function generateQR() {
+    const content = buildContent();
+    if (!content) return;
+
+    const size = parseInt(document.getElementById('qr-size').value, 10);
+    const color = document.getElementById('qr-color').value;
+    const bg = document.getElementById('qr-bg').value;
+
+    const qrDiv = document.getElementById('qrcode');
+    qrDiv.innerHTML = '';
+
+    qrCodeInstance = new QRCode(qrDiv, {
+      text: content,
+      width: size,
+      height: size,
+      colorDark: color,
+      colorLight: bg,
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    document.getElementById('qr-result').classList.add('show');
+  }
+
+  function downloadQR() {
+    const qrDiv = document.getElementById('qrcode');
+    const img = qrDiv.querySelector('img');
+    const canvas = qrDiv.querySelector('canvas');
+
+    let dataUrl;
+    if (canvas) {
+      dataUrl = canvas.toDataURL('image/png');
+    } else if (img) {
+      dataUrl = img.src;
+    } else {
+      alert('আগে QR কোড তৈরি করুন');
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'qrcode.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Enter key generates QR in text tab
+  document.getElementById('qr-text').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generateQR();
+    }
+  });
+</script>
+
+</body>
+</html>
